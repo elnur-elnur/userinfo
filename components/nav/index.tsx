@@ -8,7 +8,7 @@ const Nav = () => {
         href="/profile"
         className="whitespace-nowrap font-['Montserrat'] font-semibold leading-[25.6px] text-[#32353d] w-16 shrink-0"
       >
-        Пункт 1
+        My Profile
       </Link>
       <Link
         href="/"

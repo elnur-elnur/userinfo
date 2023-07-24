@@ -65,7 +65,6 @@ class AuthStore {
       });
 
       this.setUserId(data.id);
-
       this.setPending(false);
     } catch (error) {
       console.log("error", error?.message);

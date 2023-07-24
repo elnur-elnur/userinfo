@@ -1,10 +1,8 @@
 "use client";
 
 import auth from "@/store/auth";
-import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 const style = {
@@ -19,14 +17,15 @@ const style = {
   borderRadius: 2,
 };
 
-const AuthModal = ({ isOpen, setOpen }) => {
-  const [usedId, setusedId] = useState("");
-  const [first, setfirst] = useState({});
+const AuthModal = ({ isOpen, setOpen }: { isOpen: boolean; setOpen: any }) => {
+  const [usedId, setusedId] = useState(0);
 
   async function handleSubmitPhone(event: any) {
     event.preventDefault();
 
     await auth.setLoginState(String(event.target.phone.value));
+
+    setusedId(auth.userId);
   }
 
   async function handleSubmitConfirm(event: any) {
@@ -80,29 +79,30 @@ const AuthModal = ({ isOpen, setOpen }) => {
             </span>
           </button>
         </form>
-        <form onSubmit={handleSubmitConfirm}>
-          <label
-            htmlFor="confirmCode"
-            className="whitespace-nowrap text-xs font-['Montserrat'] leading-[21.6px] text-[#8d94a6] ml-3 mr-6"
-          >
-            Последние 4 цифры номера входящего звонка
-          </label>
+        {usedId !== 0 && (
+          <form onSubmit={handleSubmitConfirm}>
+            <label
+              htmlFor="confirmCode"
+              className="whitespace-nowrap text-xs font-['Montserrat'] leading-[21.6px] text-[#8d94a6] ml-3 mr-6"
+            >
+              Последние 4 цифры номера входящего звонка
+            </label>
 
-          <input
-            id="confirmCode"
-            autoComplete="off"
-            type="number"
-            required
-            minLength={2}
-            maxLength={4}
-            onChange={(e) => handleSubmitConfirm(e.target.value)}
-            className="border-solid border-[#ff0000] bg-[#f4f6fb] flex flex-col h-10 shrink-0 px-3 py-2 border rounded text-sm font-['Montserrat'] leading-[22.4px] text-[#32353d] mr-6 w-full"
-          />
+            <input
+              id="confirmCode"
+              autoComplete="off"
+              type="number"
+              required
+              minLength={2}
+              maxLength={4}
+              onChange={(e) => handleSubmitConfirm(e.target.value)}
+              className="border-solid border-[#ff0000] bg-[#f4f6fb] flex flex-col h-10 shrink-0 px-3 py-2 border rounded text-sm font-['Montserrat'] leading-[22.4px] text-[#32353d] mr-6 w-full"
+            />
 
-          <div className="whitespace-nowrap text-xs font-['Montserrat'] leading-[21.6px] text-[#ff0000] mb-4 ml-3 mr-1">
-            Код подтверждения некорректен или просрочен.{" "}
-          </div>
-          {/* <button
+            <div className="whitespace-nowrap text-xs font-['Montserrat'] leading-[21.6px] text-[#ff0000] mb-4 ml-3 mr-1">
+              Код подтверждения некорректен или просрочен.{" "}
+            </div>
+            {/* <button
           type="submit"
           className="overflow-hidden bg-[#3579f3] flex flex-col justify-center mb-5 h-10 shrink-0 px-16 rounded w-full"
         >
@@ -110,7 +110,9 @@ const AuthModal = ({ isOpen, setOpen }) => {
             Запросить звонок повторно
           </span>
         </button> */}
-        </form>
+          </form>
+        )}
+
         <div className="text-xs font-['Montserrat'] leading-[16.8px] text-[#6d7589]">
           Нажимая кнопку «Подтвердить номер телефона», я даю свое согласие на
           сбор и обработку моих персональных данных в соответствии с{" "}
@@ -122,9 +124,6 @@ const AuthModal = ({ isOpen, setOpen }) => {
         </div>
       </Box>
     </Modal>
-    // <div className="fixed top-1/2 left-1/2 w-auto -translate-x-1/2 -translate-y-1/2  shadow-[0px_0px_50px_16px_rgba(0,_0,_0,_0.2)] bg-white flex flex-col gap-1 p-6 rounded-lg max-w-[380px]">
-
-    // </div>
   );
 };
 
